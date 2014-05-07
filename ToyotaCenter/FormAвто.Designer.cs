@@ -333,7 +333,6 @@
             this.код_автоTextBox.Name = "код_автоTextBox";
             this.код_автоTextBox.Size = new System.Drawing.Size(100, 20);
             this.код_автоTextBox.TabIndex = 2;
-            this.код_автоTextBox.TextChanged += new System.EventHandler(this.код_автоTextBox_TextChanged);
             // 
             // производительTextBox
             // 
