@@ -75,6 +75,7 @@ namespace ToyotaCenter {
             base.Tables.CollectionChanged += schemaChangedHandler;
             base.Relations.CollectionChanged += schemaChangedHandler;
             this.EndInit();
+            this.InitExpressions();
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -86,6 +87,9 @@ namespace ToyotaCenter {
                 global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler1 = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
                 this.Tables.CollectionChanged += schemaChangedHandler1;
                 this.Relations.CollectionChanged += schemaChangedHandler1;
+                if ((this.DetermineSchemaSerializationMode(info, context) == global::System.Data.SchemaSerializationMode.ExcludeSchema)) {
+                    this.InitExpressions();
+                }
                 return;
             }
             string strSchema = ((string)(info.GetValue("XmlSchema", typeof(string))));
@@ -133,6 +137,7 @@ namespace ToyotaCenter {
             }
             else {
                 this.ReadXmlSchema(new global::System.Xml.XmlTextReader(new global::System.IO.StringReader(strSchema)));
+                this.InitExpressions();
             }
             this.GetSerializationData(info, context);
             global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
@@ -284,6 +289,7 @@ namespace ToyotaCenter {
         public override global::System.Data.DataSet Clone() {
             mimimi6DataSet cln = ((mimimi6DataSet)(base.Clone()));
             cln.InitVars();
+            cln.InitExpressions();
             cln.SchemaSerializationMode = this.SchemaSerializationMode;
             return cln;
         }
@@ -450,7 +456,7 @@ namespace ToyotaCenter {
             this.Namespace = "http://tempuri.org/mimimi6DataSet.xsd";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
-            this.tableАвто = new АвтоDataTable();
+            this.tableАвто = new АвтоDataTable(false);
             base.Tables.Add(this.tableАвто);
             this.tableГабариты = new ГабаритыDataTable();
             base.Tables.Add(this.tableГабариты);
@@ -460,13 +466,13 @@ namespace ToyotaCenter {
             base.Tables.Add(this.tableзалы);
             this._tableПокупатель_ = new _Покупатель_DataTable();
             base.Tables.Add(this._tableПокупатель_);
-            this.tableПродажи = new ПродажиDataTable();
+            this.tableПродажи = new ПродажиDataTable(false);
             base.Tables.Add(this.tableПродажи);
-            this.tableПродано = new ПроданоDataTable();
+            this.tableПродано = new ПроданоDataTable(false);
             base.Tables.Add(this.tableПродано);
             this.tableСалон = new СалонDataTable();
             base.Tables.Add(this.tableСалон);
-            this.tableСотрудники = new СотрудникиDataTable();
+            this.tableСотрудники = new СотрудникиDataTable(false);
             base.Tables.Add(this.tableСотрудники);
             this.tableТест_драйв = new Тест_драйвDataTable();
             base.Tables.Add(this.tableТест_драйв);
@@ -627,6 +633,15 @@ namespace ToyotaCenter {
             return type;
         }
         
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private void InitExpressions() {
+            this.Авто.ИнфоColumn.Expression = "Код_авто+\' \'+Модель+\' \'+Тип";
+            this.Продажи.СотрудникColumn.Expression = "Parent(FK_Продажи_Сотрудники).ФИО";
+            this.Продано.Об_автоColumn.Expression = "Parent(FK_Продано_Авто).Инфо";
+            this.Сотрудники.ФИОColumn.Expression = "Код_сотрудника+\' \'+Фамилия+\' \'+Имя+\' \'+Отчество";
+        }
+        
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void АвтоRowChangeEventHandler(object sender, АвтоRowChangeEvent e);
         
@@ -688,12 +703,23 @@ namespace ToyotaCenter {
             
             private global::System.Data.DataColumn columnФото;
             
+            private global::System.Data.DataColumn columnИнфо;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public АвтоDataTable() {
+            public АвтоDataTable() : 
+                    this(false) {
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public АвтоDataTable(bool initExpressions) {
                 this.TableName = "Авто";
                 this.BeginInit();
                 this.InitClass();
+                if ((initExpressions == true)) {
+                    this.InitExpressions();
+                }
                 this.EndInit();
             }
             
@@ -819,6 +845,14 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ИнфоColumn {
+                get {
+                    return this.columnИнфо;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -854,6 +888,38 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public АвтоRow AddАвтоRow(int Код_авто, string Производитель, СалонRow parentСалонRowByFK_Авто_Авто2, залыRow parentзалыRowByFK_Авто_залы, int Год_выпуска, string Цвет_кузова, string КПП, string Привод, string Диски, decimal Цена, ДвигательRow parentДвигательRowByFK_Авто_Двигатель, byte[] Фото, string Инфо) {
+                АвтоRow rowАвтоRow = ((АвтоRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        Код_авто,
+                        Производитель,
+                        null,
+                        null,
+                        Год_выпуска,
+                        Цвет_кузова,
+                        КПП,
+                        Привод,
+                        Диски,
+                        Цена,
+                        null,
+                        Фото,
+                        Инфо};
+                if ((parentСалонRowByFK_Авто_Авто2 != null)) {
+                    columnValuesArray[2] = parentСалонRowByFK_Авто_Авто2[0];
+                }
+                if ((parentзалыRowByFK_Авто_залы != null)) {
+                    columnValuesArray[3] = parentзалыRowByFK_Авто_залы[3];
+                }
+                if ((parentДвигательRowByFK_Авто_Двигатель != null)) {
+                    columnValuesArray[10] = parentДвигательRowByFK_Авто_Двигатель[0];
+                }
+                rowАвтоRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowАвтоRow);
+                return rowАвтоRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public АвтоRow AddАвтоRow(int Код_авто, string Производитель, СалонRow parentСалонRowByFK_Авто_Авто2, залыRow parentзалыRowByFK_Авто_залы, int Год_выпуска, string Цвет_кузова, string КПП, string Привод, string Диски, decimal Цена, ДвигательRow parentДвигательRowByFK_Авто_Двигатель, byte[] Фото) {
                 АвтоRow rowАвтоRow = ((АвтоRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
@@ -868,7 +934,8 @@ namespace ToyotaCenter {
                         Диски,
                         Цена,
                         null,
-                        Фото};
+                        Фото,
+                        null};
                 if ((parentСалонRowByFK_Авто_Авто2 != null)) {
                     columnValuesArray[2] = parentСалонRowByFK_Авто_Авто2[0];
                 }
@@ -919,6 +986,7 @@ namespace ToyotaCenter {
                 this.columnЦена = base.Columns["Цена"];
                 this.columnКод_двигателя = base.Columns["Код_двигателя"];
                 this.columnФото = base.Columns["Фото"];
+                this.columnИнфо = base.Columns["Инфо"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -948,6 +1016,8 @@ namespace ToyotaCenter {
                 base.Columns.Add(this.columnКод_двигателя);
                 this.columnФото = new global::System.Data.DataColumn("Фото", typeof(byte[]), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnФото);
+                this.columnИнфо = new global::System.Data.DataColumn("Инфо", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnИнфо);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnКод_авто}, true));
                 this.columnКод_авто.AllowDBNull = false;
@@ -969,6 +1039,7 @@ namespace ToyotaCenter {
                 this.columnДиски.MaxLength = 25;
                 this.columnЦена.AllowDBNull = false;
                 this.columnКод_двигателя.AllowDBNull = false;
+                this.columnИнфо.ReadOnly = true;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -987,6 +1058,12 @@ namespace ToyotaCenter {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             protected override global::System.Type GetRowType() {
                 return typeof(АвтоRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitExpressions() {
+                this.ИнфоColumn.Expression = "Код_авто+\' \'+Модель+\' \'+Тип";
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2377,12 +2454,23 @@ namespace ToyotaCenter {
             
             private global::System.Data.DataColumn columnНомер_зала;
             
+            private global::System.Data.DataColumn columnСотрудник;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ПродажиDataTable() {
+            public ПродажиDataTable() : 
+                    this(false) {
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ПродажиDataTable(bool initExpressions) {
                 this.TableName = "Продажи";
                 this.BeginInit();
                 this.InitClass();
+                if ((initExpressions == true)) {
+                    this.InitExpressions();
+                }
                 this.EndInit();
             }
             
@@ -2444,6 +2532,14 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn СотрудникColumn {
+                get {
+                    return this.columnСотрудник;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -2479,13 +2575,32 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ПродажиRow AddПродажиRow(int Номер_продажи, System.DateTime Дата, СотрудникиRow parentСотрудникиRowByFK_Продажи_Сотрудники, string Номер_зала, string Сотрудник) {
+                ПродажиRow rowПродажиRow = ((ПродажиRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        Номер_продажи,
+                        Дата,
+                        null,
+                        Номер_зала,
+                        Сотрудник};
+                if ((parentСотрудникиRowByFK_Продажи_Сотрудники != null)) {
+                    columnValuesArray[2] = parentСотрудникиRowByFK_Продажи_Сотрудники[0];
+                }
+                rowПродажиRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowПродажиRow);
+                return rowПродажиRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ПродажиRow AddПродажиRow(int Номер_продажи, System.DateTime Дата, СотрудникиRow parentСотрудникиRowByFK_Продажи_Сотрудники, string Номер_зала) {
                 ПродажиRow rowПродажиRow = ((ПродажиRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Номер_продажи,
                         Дата,
                         null,
-                        Номер_зала};
+                        Номер_зала,
+                        null};
                 if ((parentСотрудникиRowByFK_Продажи_Сотрудники != null)) {
                     columnValuesArray[2] = parentСотрудникиRowByFK_Продажи_Сотрудники[0];
                 }
@@ -2522,6 +2637,7 @@ namespace ToyotaCenter {
                 this.columnДата = base.Columns["Дата"];
                 this.columnКод_сотрудника = base.Columns["Код_сотрудника"];
                 this.columnНомер_зала = base.Columns["Номер_зала"];
+                this.columnСотрудник = base.Columns["Сотрудник"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2535,12 +2651,15 @@ namespace ToyotaCenter {
                 base.Columns.Add(this.columnКод_сотрудника);
                 this.columnНомер_зала = new global::System.Data.DataColumn("Номер_зала", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnНомер_зала);
+                this.columnСотрудник = new global::System.Data.DataColumn("Сотрудник", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnСотрудник);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnНомер_продажи}, true));
                 this.columnНомер_продажи.AllowDBNull = false;
                 this.columnНомер_продажи.Unique = true;
                 this.columnКод_сотрудника.AllowDBNull = false;
                 this.columnНомер_зала.MaxLength = 50;
+                this.columnСотрудник.ReadOnly = true;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2559,6 +2678,12 @@ namespace ToyotaCenter {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             protected override global::System.Type GetRowType() {
                 return typeof(ПродажиRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitExpressions() {
+                this.СотрудникColumn.Expression = "Parent(FK_Продажи_Сотрудники).ФИО";
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2684,12 +2809,23 @@ namespace ToyotaCenter {
             
             private global::System.Data.DataColumn columnСкидка;
             
+            private global::System.Data.DataColumn columnОб_авто;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ПроданоDataTable() {
+            public ПроданоDataTable() : 
+                    this(false) {
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ПроданоDataTable(bool initExpressions) {
                 this.TableName = "Продано";
                 this.BeginInit();
                 this.InitClass();
+                if ((initExpressions == true)) {
+                    this.InitExpressions();
+                }
                 this.EndInit();
             }
             
@@ -2759,6 +2895,14 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn Об_автоColumn {
+                get {
+                    return this.columnОб_авто;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -2794,6 +2938,28 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ПроданоRow AddПроданоRow(ПродажиRow parentПродажиRowByFK_Продано_Продажи, АвтоRow parentАвтоRowByFK_Продано_Авто, int Количество, decimal Цена, decimal Скидка, string Об_авто) {
+                ПроданоRow rowПроданоRow = ((ПроданоRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        null,
+                        null,
+                        Количество,
+                        Цена,
+                        Скидка,
+                        Об_авто};
+                if ((parentПродажиRowByFK_Продано_Продажи != null)) {
+                    columnValuesArray[0] = parentПродажиRowByFK_Продано_Продажи[0];
+                }
+                if ((parentАвтоRowByFK_Продано_Авто != null)) {
+                    columnValuesArray[1] = parentАвтоRowByFK_Продано_Авто[0];
+                }
+                rowПроданоRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowПроданоRow);
+                return rowПроданоRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ПроданоRow AddПроданоRow(ПродажиRow parentПродажиRowByFK_Продано_Продажи, АвтоRow parentАвтоRowByFK_Продано_Авто, int Количество, decimal Цена, decimal Скидка) {
                 ПроданоRow rowПроданоRow = ((ПроданоRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
@@ -2801,7 +2967,8 @@ namespace ToyotaCenter {
                         null,
                         Количество,
                         Цена,
-                        Скидка};
+                        Скидка,
+                        null};
                 if ((parentПродажиRowByFK_Продано_Продажи != null)) {
                     columnValuesArray[0] = parentПродажиRowByFK_Продано_Продажи[0];
                 }
@@ -2843,6 +3010,7 @@ namespace ToyotaCenter {
                 this.columnКоличество = base.Columns["Количество"];
                 this.columnЦена = base.Columns["Цена"];
                 this.columnСкидка = base.Columns["Скидка"];
+                this.columnОб_авто = base.Columns["Об_авто"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2858,6 +3026,8 @@ namespace ToyotaCenter {
                 base.Columns.Add(this.columnЦена);
                 this.columnСкидка = new global::System.Data.DataColumn("Скидка", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnСкидка);
+                this.columnОб_авто = new global::System.Data.DataColumn("Об_авто", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnОб_авто);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnНомер_продажи,
                                 this.columnКод_авто}, true));
@@ -2865,6 +3035,7 @@ namespace ToyotaCenter {
                 this.columnКод_авто.AllowDBNull = false;
                 this.columnКоличество.AllowDBNull = false;
                 this.columnЦена.AllowDBNull = false;
+                this.columnОб_авто.ReadOnly = true;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2883,6 +3054,12 @@ namespace ToyotaCenter {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             protected override global::System.Type GetRowType() {
                 return typeof(ПроданоRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitExpressions() {
+                this.Об_автоColumn.Expression = "Parent(FK_Продано_Авто).Инфо";
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3375,12 +3552,23 @@ namespace ToyotaCenter {
             
             private global::System.Data.DataColumn columnТип_зала;
             
+            private global::System.Data.DataColumn columnФИО;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public СотрудникиDataTable() {
+            public СотрудникиDataTable() : 
+                    this(false) {
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public СотрудникиDataTable(bool initExpressions) {
                 this.TableName = "Сотрудники";
                 this.BeginInit();
                 this.InitClass();
+                if ((initExpressions == true)) {
+                    this.InitExpressions();
+                }
                 this.EndInit();
             }
             
@@ -3466,6 +3654,14 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ФИОColumn {
+                get {
+                    return this.columnФИО;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -3501,6 +3697,27 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public СотрудникиRow AddСотрудникиRow(int Код_сотрудника, string Фамилия, string Имя, string Отчество, string Должность, string Пол, залыRow parentзалыRowByFK_Сотрудники_залы, string ФИО) {
+                СотрудникиRow rowСотрудникиRow = ((СотрудникиRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        Код_сотрудника,
+                        Фамилия,
+                        Имя,
+                        Отчество,
+                        Должность,
+                        Пол,
+                        null,
+                        ФИО};
+                if ((parentзалыRowByFK_Сотрудники_залы != null)) {
+                    columnValuesArray[6] = parentзалыRowByFK_Сотрудники_залы[3];
+                }
+                rowСотрудникиRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowСотрудникиRow);
+                return rowСотрудникиRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public СотрудникиRow AddСотрудникиRow(int Код_сотрудника, string Фамилия, string Имя, string Отчество, string Должность, string Пол, залыRow parentзалыRowByFK_Сотрудники_залы) {
                 СотрудникиRow rowСотрудникиRow = ((СотрудникиRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
@@ -3510,6 +3727,7 @@ namespace ToyotaCenter {
                         Отчество,
                         Должность,
                         Пол,
+                        null,
                         null};
                 if ((parentзалыRowByFK_Сотрудники_залы != null)) {
                     columnValuesArray[6] = parentзалыRowByFK_Сотрудники_залы[3];
@@ -3550,6 +3768,7 @@ namespace ToyotaCenter {
                 this.columnДолжность = base.Columns["Должность"];
                 this.columnПол = base.Columns["Пол"];
                 this.columnТип_зала = base.Columns["Тип_зала"];
+                this.columnФИО = base.Columns["ФИО"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3569,6 +3788,8 @@ namespace ToyotaCenter {
                 base.Columns.Add(this.columnПол);
                 this.columnТип_зала = new global::System.Data.DataColumn("Тип_зала", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnТип_зала);
+                this.columnФИО = new global::System.Data.DataColumn("ФИО", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnФИО);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnКод_сотрудника}, true));
                 this.columnКод_сотрудника.AllowDBNull = false;
@@ -3584,6 +3805,7 @@ namespace ToyotaCenter {
                 this.columnПол.MaxLength = 50;
                 this.columnТип_зала.AllowDBNull = false;
                 this.columnТип_зала.MaxLength = 25;
+                this.columnФИО.ReadOnly = true;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3602,6 +3824,12 @@ namespace ToyotaCenter {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             protected override global::System.Type GetRowType() {
                 return typeof(СотрудникиRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitExpressions() {
+                this.ФИОColumn.Expression = "Код_сотрудника+\' \'+Фамилия+\' \'+Имя+\' \'+Отчество";
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4189,6 +4417,22 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Инфо {
+                get {
+                    try {
+                        return ((string)(this[this.tableАвто.ИнфоColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Инфо\' в таблице \'Авто\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableАвто.ИнфоColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public СалонRow СалонRow {
                 get {
                     return ((СалонRow)(this.GetParentRow(this.Table.ParentRelations["FK_Авто_Авто2"])));
@@ -4230,6 +4474,18 @@ namespace ToyotaCenter {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetФотоNull() {
                 this[this.tableАвто.ФотоColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsИнфоNull() {
+                return this.IsNull(this.tableАвто.ИнфоColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetИнфоNull() {
+                this[this.tableАвто.ИнфоColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4666,6 +4922,22 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Сотрудник {
+                get {
+                    try {
+                        return ((string)(this[this.tableПродажи.СотрудникColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Сотрудник\' в таблице \'Продажи\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableПродажи.СотрудникColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public СотрудникиRow СотрудникиRow {
                 get {
                     return ((СотрудникиRow)(this.GetParentRow(this.Table.ParentRelations["FK_Продажи_Сотрудники"])));
@@ -4697,6 +4969,18 @@ namespace ToyotaCenter {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetНомер_залаNull() {
                 this[this.tableПродажи.Номер_залаColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsСотрудникNull() {
+                return this.IsNull(this.tableПродажи.СотрудникColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetСотрудникNull() {
+                this[this.tableПродажи.СотрудникColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4787,6 +5071,22 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Об_авто {
+                get {
+                    try {
+                        return ((string)(this[this.tableПродано.Об_автоColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'Об_авто\' в таблице \'Продано\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableПродано.Об_автоColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public АвтоRow АвтоRow {
                 get {
                     return ((АвтоRow)(this.GetParentRow(this.Table.ParentRelations["FK_Продано_Авто"])));
@@ -4817,6 +5117,18 @@ namespace ToyotaCenter {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetСкидкаNull() {
                 this[this.tableПродано.СкидкаColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsОб_автоNull() {
+                return this.IsNull(this.tableПродано.Об_автоColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetОб_автоNull() {
+                this[this.tableПродано.Об_автоColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -5134,6 +5446,22 @@ namespace ToyotaCenter {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ФИО {
+                get {
+                    try {
+                        return ((string)(this[this.tableСотрудники.ФИОColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("Значение для столбца \'ФИО\' в таблице \'Сотрудники\' равно DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableСотрудники.ФИОColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public залыRow залыRow {
                 get {
                     return ((залыRow)(this.GetParentRow(this.Table.ParentRelations["FK_Сотрудники_залы"])));
@@ -5153,6 +5481,18 @@ namespace ToyotaCenter {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetОтчествоNull() {
                 this[this.tableСотрудники.ОтчествоColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsФИОNull() {
+                return this.IsNull(this.tableСотрудники.ФИОColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetФИОNull() {
+                this[this.tableСотрудники.ФИОColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5847,7 +6187,7 @@ SELECT Код_авто, Производитель, Модель, Тип, Год
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
         public virtual mimimi6DataSet.АвтоDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            mimimi6DataSet.АвтоDataTable dataTable = new mimimi6DataSet.АвтоDataTable();
+            mimimi6DataSet.АвтоDataTable dataTable = new mimimi6DataSet.АвтоDataTable(true);
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -7821,7 +8161,7 @@ SELECT Номер_продажи, Дата, Код_сотрудника, Ном�
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
         public virtual mimimi6DataSet.ПродажиDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            mimimi6DataSet.ПродажиDataTable dataTable = new mimimi6DataSet.ПродажиDataTable();
+            mimimi6DataSet.ПродажиDataTable dataTable = new mimimi6DataSet.ПродажиDataTable(true);
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -8169,7 +8509,7 @@ SELECT Номер_продажи, Код_авто, Количество, Цен�
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Номер_продажи, Код_авто, Количество, Цена, Скидка FROM dbo.Продано";
+            this._commandCollection[0].CommandText = "SELECT Номер_продажи, Код_авто, Количество, Цена, Скидка FROM Продано";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -8192,7 +8532,7 @@ SELECT Номер_продажи, Код_авто, Количество, Цен�
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
         public virtual mimimi6DataSet.ПроданоDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            mimimi6DataSet.ПроданоDataTable dataTable = new mimimi6DataSet.ПроданоDataTable();
+            mimimi6DataSet.ПроданоDataTable dataTable = new mimimi6DataSet.ПроданоDataTable(true);
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -9119,7 +9459,7 @@ SELECT Код_сотрудника, Фамилия, Имя, Отчество, Д
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
         public virtual mimimi6DataSet.СотрудникиDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            mimimi6DataSet.СотрудникиDataTable dataTable = new mimimi6DataSet.СотрудникиDataTable();
+            mimimi6DataSet.СотрудникиDataTable dataTable = new mimimi6DataSet.СотрудникиDataTable(true);
             this.Adapter.Fill(dataTable);
             return dataTable;
         }

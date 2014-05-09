@@ -66,5 +66,30 @@ namespace ToyotaCenter
                 return f;
             }
         }
+
+        private void автоBindingSource_CurrentChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        int idCurrent = -1;
+        public int ShowSelectForm(int idАвто, out decimal price)
+        {
+            idCurrent = idАвто;
+            ShowDialog();
+            price = (decimal)((DataRowView)автоBindingSource.Current)["цена"];
+            return (int)((DataRowView)автоBindingSource.Current)["код_авто"];
+        }
+
+        public void ShowForm()
+        {
+            автоBindingSource.Position = 0;
+            Show();
+            Activate();
+        }
+        private void FormAвто_Shown(object sender, EventArgs e)
+        {
+            автоBindingSource.Position = автоBindingSource.Find("код_авто", idCurrent);
+        }
     }
 }

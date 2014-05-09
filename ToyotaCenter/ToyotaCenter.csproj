@@ -80,6 +80,12 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormSalesList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSalesList.Designer.cs">
+      <DependentUpon>FormSalesList.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormГабариты.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,6 +134,10 @@
     <Compile Include="FormТД.Designer.cs">
       <DependentUpon>FormТД.cs</DependentUpon>
     </Compile>
+    <Compile Include="mimimi6DataSet.cs">
+      <DependentUpon>mimimi6DataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="mimimi6DataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -142,6 +152,9 @@
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSalesList.resx">
+      <DependentUpon>FormSalesList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormГабариты.resx">
       <DependentUpon>FormГабариты.cs</DependentUpon>
@@ -222,8 +235,8 @@
     </None>
     <None Include="mimimi6DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>mimimi6DataSet.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>mimimi6DataSet1.Designer.cs</LastGenOutput>
     </None>
     <None Include="mimimi6DataSet.xss">
       <DependentUpon>mimimi6DataSet.xsd</DependentUpon>

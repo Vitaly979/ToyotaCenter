@@ -118,6 +118,7 @@
             this.справочникиToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
             this.справочникиToolStripMenuItem.Text = "Справочники";
             this.справочникиToolStripMenuItem.ToolTipText = "База данных";
+            this.справочникиToolStripMenuItem.Click += new System.EventHandler(this.справочникиToolStripMenuItem_Click);
             // 
             // машиныToolStripMenuItem
             // 
@@ -287,7 +288,7 @@
             this.label1.Size = new System.Drawing.Size(168, 78);
             this.label1.TabIndex = 4;
             this.label1.Text = "Данная база предоставлена \r\nв учебных целях и не является \r\nреальным отображением" +
-                " \r\nдействительности.\r\nВсе совпадения с реальностью\r\nслучайны\r\n";
+    " \r\nдействительности.\r\nВсе совпадения с реальностью\r\nслучайны\r\n";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
@@ -329,7 +330,7 @@
             this.Name = "FormMain";
             this.Text = "Тойота Центр Томск";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);

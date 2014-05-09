@@ -22,12 +22,12 @@ namespace ToyotaCenter
             Close();
         }
 
-        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = MessageBox.Show("Вы хотите закрыть программу?",
-"Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Question) !=
-DialogResult.Yes;
-        }
+//        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+//        {
+//            e.Cancel = MessageBox.Show("Вы хотите закрыть программу?",
+//"Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Question) !=
+//DialogResult.Yes;
+//        }
 
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -42,6 +42,7 @@ MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         private void машиныToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //FormAвто fd = new FormAвто();
             FormAвто.fd.Show();
         }
 
@@ -49,13 +50,14 @@ MessageBoxButtons.OK, MessageBoxIcon.Information);
         private void салонToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormСалон fd = new FormСалон();
-            fd.Show();
+            fd.ShowDialog();
         }
 
         private void продажиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormПродажи fd = new FormПродажи();
-            fd.Show();
+            //FormПродажи fd = new FormПродажи();
+            FormSalesList.fs.ShowForm();
+            //fd.ShowDialog();
         }
 
         private void link1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -66,45 +68,49 @@ MessageBoxButtons.OK, MessageBoxIcon.Information);
         private void габаритыToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormГабариты fd = new FormГабариты();
-            fd.Show();
+            fd.ShowDialog();
         }
 
         private void двигательToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormДвиг fd = new FormДвиг();
-            fd.Show();
+            fd.ShowDialog();
         }
 
         private void залыToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormЗалы fd = new FormЗалы();
-            fd.Show();
+            fd.ShowDialog();
         }
 
         private void сотрудникиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormСотрудники fd = new FormСотрудники();
-            fd.Show();
+            //FormСотрудники fd = new FormСотрудники();
+            //fd.Show();
+            FormСотрудники.fw.ShowForm();
         }
 
         private void покупателиToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormПокупатели fd = new FormПокупатели();
-            fd.Show();
+            fd.ShowDialog();
         }
 
         private void тестдрайвToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormТД fd = new FormТД();
-            fd.Show();
+            fd.ShowDialog();
         }
-        
-        
 
-        
+        private void FormMain_Load(object sender, EventArgs e)
+        {
 
-        
+        }
 
+        private void справочникиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
        
     }
 }
