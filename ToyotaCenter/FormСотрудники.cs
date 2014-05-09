@@ -125,6 +125,7 @@ else
         {
             toolStripButtonOK.Visible = true;
             idCurrent = id;
+            Visible = false;
             if (ShowDialog() == DialogResult.OK)
                 return (int)((DataRowView)сотрудникиBindingSource.Current)["код_сотрудника"];
             else
